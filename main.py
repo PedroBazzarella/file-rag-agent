@@ -44,12 +44,7 @@ def pull_ollama_models() -> None:
 
 # Loop do chat para terminal
 def chat_loop(chain: RunnableSerializable) -> None:
-    pull_ollama_models()
-
     print("\n\n-- Assistente Governanca de Dados --\nDigite 'sair' para encerrar.\n")
-
-    # Chama loop de fazer salvamento e embedding de documentos via URLs
-    save_documents()
 
     while True:
         prompt = input("Você: ")
@@ -74,6 +69,9 @@ def chat_loop(chain: RunnableSerializable) -> None:
 def main() -> None:
     print("Iniciando o assistente...")
 
+    # Verifica se os modelos estão instalados
+    pull_ollama_models()
+
     # Cria conexão com o weaviate
     try:
         weaviate_client = weaviate.connect_to_custom(
@@ -94,6 +92,9 @@ def main() -> None:
 
         # Cria o retriever
         retriever = get_retriever(weaviate_client, embedding_model)
+
+        # Chama loop de fazer salvamento e embedding de documentos via URLs
+        save_documents(embedding_model)
 
         # Define a chain
         chain = get_chain(retriever, chat_model)

@@ -1,3 +1,4 @@
+
 from config import WEAVIATE_GRPC_PORT, WEAVIATE_HOST, WEAVIATE_HTTP_PORT, INDEX_NAME
 
 from agent.core import get_embedding_model
@@ -7,9 +8,10 @@ import weaviate
 
 from langchain_weaviate import WeaviateVectorStore
 from langchain_core.documents import Document
+from langchain_ollama import OllamaEmbeddings
 
 # Chama o chunking, passa pelo embedder e salva no weaviate
-def chunk_n_store(doc_path: str):
+def chunk_n_store(doc_path: str, embedding_model: OllamaEmbeddings):
     try:
         text_from_document = chunk_document(doc_path)
         documents = [Document(page_content=text) for text in text_from_document]
@@ -18,8 +20,6 @@ def chunk_n_store(doc_path: str):
             raise ValueError(f"Retorno do chunking do documento esta vazio: '{doc_path}'")
         
         print("Iniciando embedding do documento...")
-
-        embedding_model = get_embedding_model()
 
         client = None
         client = weaviate.connect_to_custom(
