@@ -116,3 +116,17 @@ file-rag-agent/
 │   └── __init__.py
 └── README.md
 ```
+
+## Decisões Técnicas
+### Modelos Padrão
+- **Qwen3-4B**: Modelo adequado para a aplicação, com um tamanho mais enxuto e que cobre o escopo do chat, provendo respostas mais rápidas e ocupando menos espaço.
+- **Embeddinggemma**: É mantido pela Google e possui um tamanho reduzido, mesmo que existem outras opções menores, esse modelo possui um ótimo desempenho pra seu tamanho.
+
+### Código Modular
+O código foi escrito modularizando toda seção que havia uma resposabilidade própria ou configuração particular (Ex.: Embedding e Chunking). Isso facilita a manutenção e escalabilidade. Caso haja a necessidade de criar uma interface web, via Streamlit por exemplo, é possível reutilizar várias funções já presentes.
+
+### Pacote por Feature
+Cada pacote representa uma feature do projeto (Agent, Rag), caso fosse criada uma interface web ou uma funcionalidade de scraping, um novo pacote correspondente seria criado.
+
+### Upload de Arquivos em Execução
+A decisão de adicionar na execução do programa principal a interação de realizar embedding dos arquivos foi tomada para centralizar o uso. Como a escala atual é reduzida, não há a necessidade de criar um ponto de entrada diferente.
